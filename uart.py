@@ -39,7 +39,9 @@ def valid(data):
 def set(req, res):
   try:
     valid(req.body)
-    system.save(req.body)
+    cfg = Config.getInstance().load()
+    cfg.update({'uart': req.body})
+    Config.getInstance().save(cfg)
     uart.init(**req.body)
     uartReader = StreamReader(uart)
     uartWriter = StreamWriter(uart, {})
@@ -48,7 +50,7 @@ def set(req, res):
     yield from res.err(500, "Invalid {}".format(str(err)))
 
 def get(req, res):
-  yield from res.ok(system.config.load())
+  yield from res.ok(Config.getInstance().load()['uart'])
 
 class Serial:
   __instance = None
