@@ -98,7 +98,9 @@ def hotspot(req, res):
   for net in sta_if.scan():
     if net[0] not in nets:
       nets.append(net[0])
-  yield from res.ok(nets[:10])
+  nets.sort()
+  skip = req.body['skip']
+  yield from res.ok(nets[skip:skip + 10])
 
 import http
 
