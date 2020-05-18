@@ -1,9 +1,9 @@
 import http
 import system
-import uart
+import pwm
 
 app = http.App()
-app.apply([system.routes, uart.routes])
+app.apply([system.routes, pwm.routes])
 app.get('(.*)', http.static)
 
 import uasyncio as asyncio
