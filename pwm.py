@@ -1,6 +1,9 @@
 import gpio
 import machine
 
+def boot():
+  pwm(gpio.validPin(2))
+
 def pwm(pin):
   return machine.PWM(pin)
 
