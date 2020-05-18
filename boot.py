@@ -6,6 +6,6 @@
 #import webrepl
 #webrepl.start()
 import pwm
-pwm.boot()
+pwm.Config.getInstance().boot()
 import gc
 gc.collect()
