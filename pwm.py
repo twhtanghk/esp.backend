@@ -48,7 +48,7 @@ def duty(req, res):
 def getConfig(req, res):
   try:
     id, pin = gpio.parse(req)
-    res.ok(Config.getInstance().load()['pwm'][str(id)])
+    yield from res.ok(Config.getInstance().load()['pwm'][str(id)])
   except gpio.PinError as e:
     yield from res.err(500, 'Invalid pin')
 
