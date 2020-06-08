@@ -30,7 +30,7 @@ def get(req, res):
     yield from res.ok({
       'freq': pin.freq(),
       'duty': pin.duty(),
-      'range': Config.getInstance().load()['pwm'][str(id)]['range']
+      'range': system.setting.load()['pwm'][str(id)]['range']
     })
   except gpio.PinError as e:
     yield from res.err(500, 'Invalid pin')
@@ -48,16 +48,16 @@ def duty(req, res):
 def getConfig(req, res):
   try:
     id, pin = gpio.parse(req)
-    yield from res.ok(Config.getInstance().load()['pwm'][str(id)])
+    yield from res.ok(system.setting.load()['pwm'][str(id)])
   except gpio.PinError as e:
     yield from res.err(500, 'Invalid pin')
 
 def setConfig(req, res):
   try:
     id, pin = gpio.parse(req)
-    config = Config.getInstance().load()
+    config = system.setting.load()
     config['pwm'][str(id)] = {key: req.body[key] for key in ['duty', 'freq', 'range']}
-    Config.getInstance().save(config)
+    system.setting.save(config)
     yield from res.ok()
   except gpio.PinError as e:
     yield from res.err(500, 'Invalid pin')

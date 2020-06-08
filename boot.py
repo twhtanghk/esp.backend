@@ -5,7 +5,9 @@
 #uos.dupterm(None, 1) # disable REPL on UART(0)
 #import webrepl
 #webrepl.start()
+import system
 import pwm
-pwm.Config.getInstance().boot()
+system.setting = pwm.Config()
+system.setting.boot()
 import gc
 gc.collect()

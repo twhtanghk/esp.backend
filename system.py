@@ -3,6 +3,7 @@ import ujson
 
 ap_if = network.WLAN(network.AP_IF)
 sta_if = network.WLAN(network.STA_IF)
+setting = None
 
 # class to define factory config
 # load and save configuration
@@ -12,12 +13,6 @@ class Config:
 
   def __init__(self):
     self.filename = '/config.json'
-
-  @classmethod
-  def getInstance(cls):
-    if cls.__instance == None:
-      cls.__instance = cls()
-    return cls.__instance
 
   def exists(self):
     try:
@@ -47,15 +42,16 @@ class Config:
     f.close()
  
   def boot(self):
+    setting = self
     if not self.exists():
       self.save(self.factory())
     ap_if.active(True)
     sta_if.active(True)
 
 def factory(req, res):
-  ap_if.config(essid=Config.getInstance().factory()['name'], password='password')
-  sta_if.config(dhcp_hostname=Config.getInstance().factory()['name'])
-  Config.getInstance().save(Config.getInstance().factory())
+  ap_if.config(essid=setting.factory()['name'], password='password')
+  sta_if.config(dhcp_hostname=setting.factory()['name'])
+  setting.save(setting.factory())
   yield from res.ok()
   
 async def reboot(req, res):
@@ -74,7 +70,7 @@ def getAP(req, res):
 def configAP(req, res):
   config = load()
   config['name'] = req.body['essid']
-  Config.getInstance().save(config)
+  setting.save(config)
   ap_if.config(essid=req.body['essid'], password=req.body['password'])
   yield from res.ok()
 
