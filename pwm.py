@@ -7,7 +7,7 @@ class Config(system.Config):
     ret = super().factory()
     ret.update({
       'pwm': {
-        '0': {
+        '2': {
           'freq': 50,
           'duty': 100,
           'range': [50, 100]
